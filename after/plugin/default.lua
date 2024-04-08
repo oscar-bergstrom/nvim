@@ -9,9 +9,15 @@ vim.opt.colorcolumn = "79"
 
 -- Terminal settings 
 
+local prev_fname = ""
+
 local on_run = function()
-	local fname = vim.api.nvim_buf_get_name(0)
-	vim.api.nvim_command('tabnew | term ./run.sh ' .. fname)
+	prev_fname = vim.api.nvim_buf_get_name(0)
+	vim.api.nvim_command('tabnew | term ./run.sh ' .. prev_fname)
+end
+
+local on_run_prev = function()
+	vim.api.nvim_command('tabnew | term ./run.sh ' .. prev_fname)
 end
 
 local t_opts = {silent = true}
@@ -25,3 +31,4 @@ keymap('t', '<C-Right>', '<C-\\><C-N><C-w>l', t_opts)
 
 keymap('n', '<leader>rt', '<cmd>tabnew | term<cr> | i', {desc = '[R]un [T]erminal'})
 keymap('n', '<leader>rf', on_run, {desc = '[R]un [F]ile'})
+keymap('n', '<leader>rp', on_run_prev, {desc = '[R]un [P]revious file'})
